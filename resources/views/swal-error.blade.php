@@ -1,0 +1,1 @@
+swal('', 'Whoops... something went wrong :(', 'error');
