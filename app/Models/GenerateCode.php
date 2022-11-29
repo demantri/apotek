@@ -62,4 +62,23 @@ class GenerateCode extends Model
         $kodetampil = "BRG".$batas;
         return $kodetampil;
     }
+
+    public function kodeMember() {
+        $kode_brg = DB::table('member')
+                        ->selectRaw('RIGHT(kode_member, 4) as kode')
+                        ->orderBy('id', 'desc')
+                        ->limit(1);
+        $query = $kode_brg->get();
+
+        if (count($query) <> 0) {
+            $data = $query->first();
+            $kode = intval($data->kode) + 1;
+        } else {
+            $kode = 1;
+        }
+        $batas = str_pad($kode, 4, "0", STR_PAD_LEFT);
+        $date= date('Ymd');
+        $kodetampil = "M".$date.$batas;
+        return $kodetampil;
+    }
 }

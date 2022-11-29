@@ -15,53 +15,23 @@
                 Masterdata
             </li>
 
-            {{-- <li class="sidebar-item">
-                <a class="sidebar-link" href="/masterdata/dokter">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dokter</span>
-                </a>
-            </li> --}}
-
-            {{-- <li class="sidebar-item">
-                <a class="sidebar-link" href="/masterdata/supplier">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Poliklinik</span>
-                </a>
-            </li> --}}
-
-            {{-- <li class="sidebar-item">
-                <a class="sidebar-link" href="/masterdata/supplier">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Asuransi</span>
-                </a>
-            </li> --}}
-
             <li class="sidebar-item">
-                <a class="sidebar-link" href="/masterdata/obat">
+                <a class="sidebar-link" href="{{ url('masterdata/obat') }}">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Obat</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="/masterdata/pelanggan">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Pelanggan</span>
+                <a class="sidebar-link" href="{{ url('masterdata/member') }}">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Member</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="/masterdata/supplier">
+                <a class="sidebar-link" href="{{ url('masterdata/supplier') }}">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Supplier</span>
                 </a>
             </li>
-
-            {{-- <li class="sidebar-item">
-                <a class="sidebar-link" href="/masterdata/obat">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Keterangan</span>
-                </a>
-            </li> --}}
-
-            {{-- <li class="sidebar-item">
-                <a class="sidebar-link" href="/masterdata/supplier">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Rawat Inap</span>
-                </a>
-            </li> --}}
 
             {{-- laporan --}}
             <li class="sidebar-header">
