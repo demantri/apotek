@@ -81,4 +81,25 @@ class GenerateCode extends Model
         $kodetampil = "M".$date.$batas;
         return $kodetampil;
     }
+
+    public function generateCodePnj()
+    {
+        $kode_brg = DB::table('penjualan_obat')
+                        ->selectRaw('RIGHT(invoice, 5) as kode')
+                        ->where('status', '<>', 2)
+                        ->orderBy('id', 'desc')
+                        ->limit(1);
+        $query = $kode_brg->get();
+
+        if (count($query) <> 0) {
+            $data = $query->first();
+            $kode = intval($data->kode) + 1;
+        } else {
+            $kode = 1;
+        }
+        $batas = str_pad($kode, 5, "0", STR_PAD_LEFT);
+        $date= date('dmy');
+        $kodetampil = "TRXPNJO".$date.$batas;
+        return $kodetampil;
+    }
 }

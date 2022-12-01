@@ -57,13 +57,13 @@
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="/pendaftaran/pasien">
+                <a class="sidebar-link" href="{{ url('transaksi/penjualan-obat') }}">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Penjualan Obat</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="/pasien/checkup">
+                <a class="sidebar-link" href="{{ url('transaksi/pembelian-obat') }}">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Pembelian Obat</span>
                 </a>
             </li>
