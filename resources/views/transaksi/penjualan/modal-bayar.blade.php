@@ -30,7 +30,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="" class="form-label">Kembalian</label>
-                    <input type="text" style="text-align:right;" class="form-control" id="kembalian_add" name="kembalian_add" readonly>
+                    <input type="text" style="text-align:right;" class="form-control" id="kembalian_add" name="kembalian_add" value="0" readonly>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

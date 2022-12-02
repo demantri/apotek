@@ -81,6 +81,7 @@ class PenjualanController extends Controller
                     $detail_obat = [
                         'invoice' => $request->invoice,
                         'kode_obat' => $produk->kode,
+                        'nama_obat' => $produk->nama,
                         'harga_satuan' => $produk->harga_jual,
                         'qty' => $qty,
                         'subtotal' => $produk->harga_jual * $qty
@@ -103,6 +104,35 @@ class PenjualanController extends Controller
 
             return response()->json([
                 'message' => 'Data berhasil disimpan'
+            ], 200);
+        } catch (\Exception $e) {
+			return response()->json($e->getMessage(), 500);
+        }
+    }
+
+    public function simpan_bayar(Request $request)
+    {
+        try {
+            $invoice = $request->invoice;
+            $pelanggan = $request->pelanggan;
+
+            $data = [
+                'pelanggan' => $request->pelanggan,
+                'status' => 1,
+                'total_transaksi' => $request->total_transaksi,
+                'ppn' => $request->total_ppn,
+                'grandtotal' => $request->grand_total,
+                'kembalian' => $request->kembalian,
+                'nominal_pembayaran' => $request->nominal_pembayaran
+            ];
+
+            $update = DB::table('penjualan_obat')
+                ->where('invoice', $invoice)
+                ->update($data);
+
+            return response()->json([
+                'message' => 'Data berhasil disimpan',
+                'data' => $update
             ], 200);
         } catch (\Exception $e) {
 			return response()->json($e->getMessage(), 500);

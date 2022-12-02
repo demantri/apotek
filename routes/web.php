@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ExportGraphController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ExportGraphController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('template.login.index');
+// });
 
-Route::get('dummy/export/', [ExportGraphController::class, 'export']);
+// Route::get('dummy/export/', [ExportGraphController::class, 'export']);
+
+Route::get('/', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/login', [LoginController::class, 'authenticate']);
+Route::get('/logout', [LoginController::class, 'logout']);
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
