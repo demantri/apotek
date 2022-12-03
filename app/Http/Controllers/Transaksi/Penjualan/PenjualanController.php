@@ -138,4 +138,10 @@ class PenjualanController extends Controller
 			return response()->json($e->getMessage(), 500);
         }
     }
+
+    public function getList()
+    {
+        $data = DB::table('penjualan_obat')->where('status', '!=', 2)->orderBy('id', 'desc')->get();
+        return response()->json($data, 200); 
+    }
 }

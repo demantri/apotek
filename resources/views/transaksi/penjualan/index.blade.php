@@ -23,7 +23,7 @@
                                     <th>Invoice</th>
                                     <th>Tgl Transaksi</th>
                                     <th>Total Transaksi</th>
-                                    <th>Tipe Pembayaran</th>
+                                    <th>Pelanggan</th>
                                     <th>Status Pembayaran</th>
                                     <th>Aksi</th>
                                 </tr>

@@ -12,11 +12,19 @@
                     <input type="text" class="form-control" id="invoice_add" name="invoice_add" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="nama_obat" class="form-label">Jenis Pelanggan</label>
+                    <label for="" class="form-label">Jenis Pelanggan</label>
                     <select name="pelanggan" id="pelanggan" class="form-control" data-placeholder="Jenis Pelanggan">
                         <option value=""></option>
                         <option value="Guest" selected>Guest</option>
                         <option value="Member">Member</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="" class="form-label">Jenis Pembayaran</label>
+                    <select name="jenis_pembayaran" id="jenis_pembayaran" class="form-control" data-placeholder="Jenis Pembayaran">
+                        <option value=""></option>
+                        <option value="Cash" selected>Cash</option>
+                        <option value="Debit">Debit</option>
                     </select>
                 </div>
                 <hr>

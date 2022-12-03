@@ -71,7 +71,7 @@
                 <div class="card-body">
                     <form id="form-detail">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
+                            <table class="table table-bordered table-hover table-striped">
                                 <tr>
                                     <th>#</th>
                                     <th>Item</th>
@@ -121,6 +121,7 @@
                                 </tr>
                             </table>
                         </div>
+                        @if (count($detail) > 0)
                         <hr>
                         <div class="button">
                             <button type="button" id="simpan_cetak" class="btn btn-outline-primary">Simpan & Cetak</button>
@@ -128,6 +129,7 @@
                             <button type="button" id="pending" class="btn btn-outline-warning" onclick="proses('pending')">Pending</button>
                             <button type="button" id="batalkan" class="btn btn-outline-danger" onclick="proses('batal')">Batalkan</button>
                         </div>
+                        @endif
                     </form>
                 </div>
             </div>

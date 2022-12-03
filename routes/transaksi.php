@@ -8,5 +8,7 @@ Route::group(['prefix' => 'penjualan-obat', 'namespace' => 'Transaksi\Penjualan'
     Route::get('/add', [PenjualanController::class, 'form_add']);
     Route::post('/add-detail', [PenjualanController::class, 'add_detail']);
     Route::post('/simpan-bayar', [PenjualanController::class, 'simpan_bayar']);
+
+    Route::get('/list', [PenjualanController::class, 'getList']);
     
 });
