@@ -46,8 +46,8 @@ class IndexController extends Controller
                 'kode' => $request->kode_obat,
                 'nama' => $request->nama_obat,
                 // 'jenis_obat' => $request->jenis_obat,
-                'harga_beli' => $request->harga_beli,
-                'harga_jual' => $request->harga_jual,
+                'harga_beli' => str_replace('.', '', $request->harga_beli),
+                'harga_jual' => str_replace('.', '', $request->harga_jual),
                 'stok' => $request->stok_obat,
                 'satuan' => $request->satuan,
             ];
