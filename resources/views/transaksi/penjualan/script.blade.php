@@ -2,6 +2,11 @@
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+    
+    function upperCase(key) {
+		let value = $('#' + key).val();
+		$('#' + key).val(value.toUpperCase());
+	}
 
     $('.money').mask('000,000,000,000,000', {
         reverse: true
@@ -11,7 +16,27 @@
         return data.split(',').join('');
     }
 
-    $("#obat").select2();
+    // $("#obat").select2();
+
+    $("#obat").on("input", function() {
+        let value = $(this).val();
+
+        $.ajax({
+            url: '{{ url('transaksi/penjualan-obat/findBarang') }}',
+            type: 'post',
+            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+            data: {
+                kode_obat : value
+            }, 
+            success: function(response) {
+                if(!Object.keys(response).length){
+                    $("#nama_obat").val('');
+                } else {
+                    $("#nama_obat").val(response.nama)
+                }
+            }
+        })
+    })
 
     $("#form-add").on("submit", function(e) {
         e.preventDefault();

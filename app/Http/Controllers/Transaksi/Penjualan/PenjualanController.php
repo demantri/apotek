@@ -144,4 +144,13 @@ class PenjualanController extends Controller
         $data = DB::table('penjualan_obat')->where('status', '!=', 2)->orderBy('id', 'desc')->get();
         return response()->json($data, 200); 
     }
+
+    public function findBarang(Request $request)
+    {
+        $kode_obat = $request->kode_obat;
+        
+        $data = DB::table('obat')->where('kode', $kode_obat)->first();
+
+        return response()->json($data, 200);
+    }
 }

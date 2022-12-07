@@ -35,10 +35,23 @@
                             </div>
                         </div>
                         <hr>
+
                         <div class="row mb-3">
+                            <label for="" class="col-sm-4 col-form-label">Kode Obat <span style="color:rgba(255, 0, 0, 0.616)">*</span></label>
+                            <div class="col-sm-8 form-line">
+                                <input type="text" class="form-control" id="obat" name="obat" placeholder="Input Kode Produk ..." onkeyup="upperCase('obat')">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="" class="col-sm-4 col-form-label">Nama Obat</label>
+                            <div class="col-sm-8 form-line">
+                                <input type="text" class="form-control" id="nama_obat" name="nama_obat" readonly>
+                            </div>
+                        </div>
+                        {{-- <div class="row mb-3">
                             <label for="" class="col-sm-4 col-form-label">Obat</label>
                             <div class="col-sm-8 form-line">
-                              {{-- <input type="text" class="form-control" name="obat" id="obat"> --}}
                               <select name="obat" id="obat" class="form-control">
                                 <option value="">Pilih</option>
                                 @foreach ($obat as $item)
@@ -46,7 +59,7 @@
                                 @endforeach
                               </select>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row mb-3">
                             <label for="" class="col-sm-4 col-form-label">Jumlah</label>
                             <div class="col-sm-8 form-line">
@@ -141,4 +154,7 @@
 @endsection
 @section('script')
     @include('transaksi.penjualan.script')
+    <script>
+        $("#sidebar").addClass('collapsed');
+    </script>
 @endsection
