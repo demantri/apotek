@@ -75,7 +75,8 @@
                 cancelButtonText: 'Tidak'
             }).then((confirm) => {
                 if (confirm.value) {
-                    alert('proses pending   ')
+                    let invoice = $("#invoice").val();
+                    prosesPending(invoice);
                 }
             }); 
         } else if (status == 'batal') {
@@ -89,7 +90,8 @@
                 cancelButtonText: 'Tidak'
             }).then((confirm) => {
                 if (confirm.value) {
-                    alert('proses batal')
+                    let invoice = $("#invoice").val();
+                    prosesBatal(invoice);
                 }
             }); 
         }
@@ -131,6 +133,52 @@
         }
     });
 
+    function prosesPending(invoice) {
+        $.ajax({
+            url: '{{ url('transaksi/penjualan-obat/pending') }}',
+            type: 'post',
+            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+            data: {
+                invoice: invoice
+            },
+            success: function(response) {
+
+                swal('', response.message, 'success');
+
+                location.reload();
+            },
+            error: function(err) {
+                // console.log(err);
+                if (err.status == '402') {
+                    swal('', err.responseJSON.message, 'warning');
+                }
+            }
+        });
+    }
+
+    function prosesBatal(invoice) {
+        $.ajax({
+            url: '{{ url('transaksi/penjualan-obat/batal') }}',
+            type: 'post',
+            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+            data: {
+                invoice: invoice
+            },
+            success: function(response) {
+
+                swal('', response.message, 'success');
+
+                location.reload();
+            },
+            error: function(err) {
+                // console.log(err);
+                if (err.status == '402') {
+                    swal('', err.responseJSON.message, 'warning');
+                }
+            }
+        });
+    }
+
     $("#btn-simpan").on("click", function() {
         swal({
             text: "Apakah anda yakin?",
@@ -150,9 +198,16 @@
                     data: params,
                     success: function(response) {
 
+                        // console.log('hai')
                         swal('', response.message, 'success');
 
                         location.reload();
+                    },
+                    error: function(err) {
+                        // console.log(err);
+                        if (err.status == '402') {
+                            swal('', err.responseJSON.message, 'warning');
+                        }
                     }
                 });
             }
@@ -221,7 +276,7 @@
                 }},
                 { data : 'pelanggan', class : 'nowrap' },
                 { data : 'status', class : 'nowrap text-center', render: function(data, type, row, meta) {
-                    return (row.status == 1) ? '<span class="badge bg-success">Terbayar</span>' : (row.status == 3) ? '<span class="badge bg-warning">Pending</span>' : (row.status == 4) ? '<span class="badge bg-danger">Pembayaran Gagal</span>' : '';
+                    return (row.status == 1) ? '<span class="badge bg-success">Terbayar</span>' : (row.status == 3) ? '<span class="badge bg-warning">Pending</span>' : (row.status == 4) ? '<span class="badge bg-danger">Transaksi Dibatalkan</span>' : '';
                 }},
                 { data : 'invoice', class: 'nowrap text-center', render: function(data, type, row, meta) {
                     return `<button class="btn btn-sm btn-info" data-id="${row.invoice}"> Detail Penjualan Obat</button>`;

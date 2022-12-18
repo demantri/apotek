@@ -73,25 +73,25 @@
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ url('laporan/lap-penjualan') }}">
+                <a class="sidebar-link" href="{{ url('report/laporan-penjualan') }}">
                     <i class="align-middle" data-feather="settings"></i> <span class="align-middle">Laporan Penjualan</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ url('laporan/lap-pembelian') }}">
+                <a class="sidebar-link" href="{{ url('report/laporan-pembelian') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Laporan Pembelian</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ url('laporan/jurnal-umum') }}">
+                <a class="sidebar-link" href="{{ url('report/jurnal-umum') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Jurnal Umum</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ url('laporan/buku-besar') }}">
+                <a class="sidebar-link" href="{{ url('report/buku-besar') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Buku Besar</span>
                 </a>
             </li>

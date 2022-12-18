@@ -1,5 +1,5 @@
 @section('title')
-    Masterdata Obat
+    Penjualan Obat
 @endsection
 
 @extends('template.main')

@@ -43,6 +43,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->prefix('transaksi')
                 ->group(base_path('routes/transaksi.php'));
+
+            Route::middleware('web')
+                ->prefix('report')
+                ->group(base_path('routes/report.php'));
         });
     }
 

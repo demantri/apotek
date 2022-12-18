@@ -6,12 +6,14 @@ use App\Models\GenerateCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\JurnalModel;
 use Illuminate\Support\Facades\Validator;
 
 class PenjualanController extends Controller
 {
     public function __construct() {
         $this->kode = new GenerateCode();
+        $this->jurnal = new JurnalModel();
     }
 
     public function index()
@@ -89,10 +91,13 @@ class PenjualanController extends Controller
     
                     DB::table('detail_penjualan_obat')->insert($detail_obat);
                 } else {
+                    // dd($produk->harga_jual);
+                    $harga_satuan = $produk->harga_jual;
                     $hasil = $detail_penjualan->qty + $qty;
                     
                     $data_arr = [
-                        'qty' => $hasil
+                        'qty' => $hasil,
+                        'subtotal' => $hasil * $harga_satuan
                     ];
                     
                     DB::table('detail_penjualan_obat')
@@ -119,6 +124,25 @@ class PenjualanController extends Controller
             $kode_obat = $request->kode_obat;
             $qty = $request->qty;
 
+            for ($i=0; $i < count($kode_obat); $i++) { 
+
+                $obat = DB::table('obat')->where('kode', $kode_obat[$i])->first();
+                $last_stok = ($obat->stok) - ($qty[$i]);
+
+                if ($last_stok < 0) {
+                    # code...
+                    return response()->json([
+                        'message' => 'Stok kurang dari 0! silahkan periksa stok akhir!'
+                    ], 402); 
+                }
+
+                DB::table('obat')
+                    ->where('kode', $kode_obat[$i])
+                    ->update([
+                        'stok' => $last_stok
+                    ]);
+            }
+
             $data = [
                 'pelanggan' => $pelanggan,
                 'status' => 1,
@@ -133,17 +157,23 @@ class PenjualanController extends Controller
                 ->where('invoice', $invoice)
                 ->update($data);
 
-            for ($i=0; $i < count($kode_obat); $i++) { 
+            // jurnal debit
+            $this->jurnal->singleJurnal(
+                $invoice,
+                date('Y-m-d'),
+                111,
+                $request->total_transaksi_add,
+                'd'
+            );
 
-                $obat = DB::table('obat')->where('kode', $kode_obat[$i])->first();
-                $last_stok = ($obat->stok) - ($qty[$i]);
-
-                DB::table('obat')
-                    ->where('kode', $kode_obat[$i])
-                    ->update([
-                        'stok' => $last_stok
-                    ]);
-            }
+            // jurnal kredit
+            $this->jurnal->singleJurnal(
+                $invoice,
+                date('Y-m-d'),
+                400,
+                $request->total_transaksi_add,
+                'k'
+            );
 
             return response()->json([
                 'message' => 'Data berhasil disimpan'
@@ -172,5 +202,51 @@ class PenjualanController extends Controller
     {
         $data = DB::table('member')->where('status', 1)->orderBy('id', 'asc')->get();
         return response()->json($data, 200);
+    }
+
+    public function proses_pending(Request $request)
+    {
+        $invoice = $request->invoice;
+
+        $update = [
+            'pelanggan' => '-',
+            'status' => 3,
+            'total_transaksi' => '-',
+            'ppn' => '-',
+            'grandtotal' => '-',
+            'kembalian' => '-',
+            'nominal_pembayaran' => '-',
+        ];
+
+        DB::table('penjualan_obat')
+            ->where('invoice', $invoice)
+            ->update($update);
+
+        return response()->json([
+            'message' => 'Transaksi berhasil dipending'
+        ], 200);
+    }
+
+    public function proses_batal(Request $request)
+    {
+        $invoice = $request->invoice;
+
+        $update = [
+            'pelanggan' => '-',
+            'status' => 4,
+            'total_transaksi' => '-',
+            'ppn' => '-',
+            'grandtotal' => '-',
+            'kembalian' => '-',
+            'nominal_pembayaran' => '-',
+        ];
+
+        DB::table('penjualan_obat')
+            ->where('invoice', $invoice)
+            ->update($update);
+
+        return response()->json([
+            'message' => 'Transaksi berhasil dibatalkan'
+        ], 200);
     }
 }

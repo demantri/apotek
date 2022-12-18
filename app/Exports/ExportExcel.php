@@ -1,15 +1,81 @@
-<?php
+<?php 
 
 namespace App\Exports;
 
-use App\Models\DummyModel;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithProperties;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 
-class ExportExcel implements FromCollection
+
+class ExportExcel implements FromView, WithProperties, ShouldAutoSize, WithEvents, WithChunkReading
 {
-    public function collection()
+    /** trait RegistersEventListeners */
+    use RegistersEventListeners, Exportable;
+    
+    /** @var view, params, sheetName */
+	public $view, $params, $sheetName;
+	public static $locked;
+
+    public function __construct(string $view='', array $params=[], string $sheetName='sheet', bool $locked=true) 
     {
-        return DummyModel::all();
+		$this->view = $view;
+		$this->params = $params;
+		$this->sheetName = $sheetName;
+		self::$locked = $locked;
+	}
+
+    public function view(): View
+    {
+        return view($this->view, $this->params);
     }
 
+    /**
+     * Untuk excel details
+     *
+     * @return array
+     */
+    public function properties(): array
+    {
+        return [
+            'creator'        => 'Demen ngoding',
+            'title'          => $this->sheetName,
+            'description'    => 'Demen ngoding',
+            'keywords'       => 'export,spreadsheet',
+            'manager'        => '',
+            'company'        => '',
+        ];
+    }
+
+    /**
+     * Event gets raised at the end of the sheet process.
+     *
+     * @param  AfterSheet $event 
+     */
+    // public static function afterSheet(AfterSheet $event)
+    // {
+    //     if(self::$locked) {
+    //     	$protection = $event->sheet->getProtection();
+	//         $protection->setPassword(config('excel.password'));
+	//         $protection->setSheet(true);
+	//         $protection->setSort(true);
+	//         $protection->setSelectLockedCells(true);
+	//         $protection->setSelectUnlockedCells(true);
+    //     }
+    // }
+
+    /**
+     * Chunk 
+     * 
+     * @return int
+     */
+    public function chunkSize(): int
+    {
+        return 1000;
+    }
 }
