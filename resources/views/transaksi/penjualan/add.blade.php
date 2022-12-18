@@ -116,7 +116,7 @@
                             </table>
                         </div>
                         <div class="info-total">
-                            <table class="table  table-sm table-borderless">
+                            <table class="table table-sm table-borderless">
                                 <tr>
                                     <td style="width: 150px"><strong>Total Transaksi</strong></td>
                                     <td style="width: 10px">:</td>

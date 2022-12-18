@@ -113,26 +113,40 @@ class PenjualanController extends Controller
     public function simpan_bayar(Request $request)
     {
         try {
-            $invoice = $request->invoice;
+            $invoice = $request->invoice_add;
             $pelanggan = $request->pelanggan;
 
+            $kode_obat = $request->kode_obat;
+            $qty = $request->qty;
+
             $data = [
-                'pelanggan' => $request->pelanggan,
+                'pelanggan' => $pelanggan,
                 'status' => 1,
-                'total_transaksi' => $request->total_transaksi,
-                'ppn' => $request->total_ppn,
-                'grandtotal' => $request->grand_total,
-                'kembalian' => $request->kembalian,
-                'nominal_pembayaran' => $request->nominal_pembayaran
+                'total_transaksi' => str_replace(',', '', $request->total_transaksi_add),
+                'ppn' => str_replace(',', '', $request->ppn_add),
+                'grandtotal' => str_replace(',', '', $request->grandtotal_add),
+                'kembalian' => str_replace(',', '', $request->kembalian_add),
+                'nominal_pembayaran' => str_replace(',', '', $request->nominal_pembayaran_add)
             ];
 
-            $update = DB::table('penjualan_obat')
+            DB::table('penjualan_obat')
                 ->where('invoice', $invoice)
                 ->update($data);
 
+            for ($i=0; $i < count($kode_obat); $i++) { 
+
+                $obat = DB::table('obat')->where('kode', $kode_obat[$i])->first();
+                $last_stok = ($obat->stok) - ($qty[$i]);
+
+                DB::table('obat')
+                    ->where('kode', $kode_obat[$i])
+                    ->update([
+                        'stok' => $last_stok
+                    ]);
+            }
+
             return response()->json([
-                'message' => 'Data berhasil disimpan',
-                'data' => $update
+                'message' => 'Data berhasil disimpan'
             ], 200);
         } catch (\Exception $e) {
 			return response()->json($e->getMessage(), 500);
@@ -151,6 +165,12 @@ class PenjualanController extends Controller
         
         $data = DB::table('obat')->where('kode', $kode_obat)->first();
 
+        return response()->json($data, 200);
+    }
+
+    public function getMember()
+    {
+        $data = DB::table('member')->where('status', 1)->orderBy('id', 'asc')->get();
         return response()->json($data, 200);
     }
 }

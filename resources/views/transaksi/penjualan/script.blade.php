@@ -101,11 +101,17 @@
 
     function modalBayar() {
         $("#modal-bayar").modal('show');
-
         $("#invoice_add").val($("#invoice").val());
+        $("#ppn_add").val($("#total_ppn").val());
+        $("#total_transaksi_add").val($("#total_transaksi").val());
 
         $("#pelanggan, #jenis_pembayaran").select2({
             minimumResultsForSearch: -1,
+            dropdownParent: $("#modal-bayar")
+        });
+
+        $("#member").select2({
+            placeholder: 'Pilih Member',
             dropdownParent: $("#modal-bayar")
         });
 
@@ -136,16 +142,7 @@
             cancelButtonText: 'Tidak'
         }).then((confirm) => {
             if (confirm.value) {
-                let params = {
-                    invoice : $("#invoice").val(),
-                    pelanggan : $("#pelanggan").val(),
-                    total_transaksi : $("#total_transaksi").val(),
-                    total_ppn : $("#total_ppn").val(),
-                    grand_total : $("#total_grand").val(),
-                    nominal_pembayaran : splitNumber($("#nominal_pembayaran_add").val()),
-                    kembalian : splitNumber($("#kembalian_add").val()),
-                }
-                // console.log(params)
+                let params = $("#modalForm").serialize();
                 $.ajax({
                     url: '{{ url('transaksi/penjualan-obat/simpan-bayar') }}',
                     type: 'post',
@@ -161,6 +158,35 @@
             }
         }); 
     });
+
+    $("#pelanggan").on("change", function() {
+        let jenis_pelanggan = $("#pelanggan").val();
+
+        if (jenis_pelanggan == 'Member') {
+            $("#list-member").removeClass('d-none');
+
+            getMember();
+        } else {
+            $("#list-member").addClass('d-none');
+        }
+    });
+
+    function getMember() {
+        $.ajax({
+            url: '{{ url('transaksi/penjualan-obat/getMember') }}',
+            type: 'get',
+            success: function(response) {
+                console.log(response)
+                let option = '<option value=""></option>';
+
+                response.forEach(element => {
+                    option += `<option value="${element.kode_member}">${element.kode_member +' - '+ element.nama_member}</option>`;    
+                });
+
+                $("#member").html(option);
+            }
+        });
+    }
 
     function getData() {
         $("#table").DataTable({
@@ -190,7 +216,9 @@
                 },
                 { data : 'invoice', class: 'nowrap' },
                 { data : 'tgl_transaksi', class : 'nowrap' },
-                { data : 'total_transaksi', class : 'nowrap text-right' },
+                { data : 'total_transaksi', class : 'nowrap text-right', render: function(data, type, row, meta) {
+                    return `Rp. ` + numberWithCommas(row.total_transaksi)
+                }},
                 { data : 'pelanggan', class : 'nowrap' },
                 { data : 'status', class : 'nowrap text-center', render: function(data, type, row, meta) {
                     return (row.status == 1) ? '<span class="badge bg-success">Terbayar</span>' : (row.status == 3) ? '<span class="badge bg-warning">Pending</span>' : (row.status == 4) ? '<span class="badge bg-danger">Pembayaran Gagal</span>' : '';
@@ -203,9 +231,7 @@
     }
 
     $(document).ready(function() {
-        
         getData();
-
 
         let total_transaksi = $("#total_transaksi").val();
         let total_ppn = $("#total_ppn").val();
